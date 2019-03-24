@@ -55,7 +55,9 @@ def cezari_shqip(teksti,qelsi):
 
 def enkripto_dokumentin(path, filename, qelesi, enc_dec):
     print('brenda funksionit per enkriptim')
+    #shiqojme se a duhet enkriptuar apo dekriptuar
     if enc_dec == False:
+        #dekriptimi i cezarit eshte inversi i qelsit(zevendesojme mbrapsht)
         qelesi = qelesi * (-1)
     print('brenda enkripto_dokuntin() ', path)
     txt_file = open(path,'r')
@@ -73,6 +75,8 @@ def enkripto_dokumentin(path, filename, qelesi, enc_dec):
     print('u krijua file i ri')
     enc_file.write(teksti_enkriptuar)
     enc_file.close()
+    #file i ri veqse eshte mbyll dhe ruajtur ne direktorin se ku 
+    # ka qen file-i paraprak me emrin filename
     print('file i ri u mbyll')
 
 

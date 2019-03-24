@@ -1,6 +1,8 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import cazari_sq
 
+
+#INTERFACE I FORMUAR ME QT DESIGNER 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
@@ -88,6 +90,7 @@ class Ui_Dialog(object):
         self.bottom.rejected.connect(Dialog.reject)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
+        #Thirrja e funksionit enkripto() kur klikohet butoni save_button
         self.save_button.clicked.connect(self.enkripto)
 
     def retranslateUi(self, Dialog):
@@ -100,23 +103,35 @@ class Ui_Dialog(object):
         self.encrypt_radio.setText(_translate("Dialog", "Encrypt"))
         self.filename_label.setText(_translate("Dialog", "Emri i file-it te ri: "))
         self.save_button.setText(_translate("Dialog", "Save"))
-    
+
+    #funskioni enkripto ka per qellim te lidh funksionet 
+    # e tjera per enkriptim dhe interface-it
     def enkripto(self):
+        #directory e file-it qe do te enkriptohet dhe 
+        # filename- emri i file-it te ri se si do te ruhet
         directory =r'%s' %self.directory_field.text()
         filename = self.filename_field.text()
-        if '.txt' not in filename:
+        if filename == '':
+            #nese eshte shprazet e vendosim default cz_sq.txt
+            filename = 'cz_sq.txt'
+        elif '.txt' not in filename:
+            #shtimi i .txt nese nuk e ka cekur perdoruesi
             filename = filename + '.txt'
-        print('direktoria u murr: ', directory)
-        #encrypt_radio = True
+        print('direktoria u murr: ', directory)#debugging
+        
+        #shiqon se a ka zgjedhur opsionin enkriptimit| apo dekriptimit(ende jo)
+        if self.encrypt_radio.isChecked():
+            encrypt_radio = True
         qelesi = self.qelesi.value()
         print('qelesi u murr', str(qelesi))
         try:
             print('trying cazar_sq')
-            cazari_sq.enkripto_dokumentin(directory, filename, qelesi, True)
+            #thirrja e funksionit per enkriptim nga file-i tjeter cazar_sq
+            cazari_sq.enkripto_dokumentin(directory, filename, qelesi, encrypt_radio)
         except Exception as e:
             print('Not working check fields...')
             print(e)
-
+        
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
