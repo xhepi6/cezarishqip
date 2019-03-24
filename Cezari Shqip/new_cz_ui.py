@@ -94,7 +94,7 @@ class Ui_Dialog(object):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
         self.title_text.setText(_translate("Dialog", "Cezar Cipher in Albanian Alphabet"))
-        self.write_path_text.setText(_translate("Dialog", "Path (psh: C:UsersHPDesktope.txt)"))
+        self.write_path_text.setText(_translate("Dialog", "Path (psh: C:\\Users\\HP\\Desktop\\file.txt)"))
         self.browse_button.setText(_translate("Dialog", "Browse"))
         self.label_qelesi.setText(_translate("Dialog", "Qelsi:"))
         self.encrypt_radio.setText(_translate("Dialog", "Encrypt"))
@@ -116,3 +116,13 @@ class Ui_Dialog(object):
         except Exception as e:
             print('Not working check fields...')
             print(e)
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    Dialog = QtWidgets.QDialog()
+    ui = Ui_Dialog()
+    ui.setupUi(Dialog)
+    Dialog.show()
+    sys.exit(app.exec_())
+
