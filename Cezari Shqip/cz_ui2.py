@@ -1,8 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-import cazari_sq
+import cesar_sq
 
-
-#INTERFACE I FORMUAR ME QT DESIGNER 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
@@ -37,7 +35,7 @@ class Ui_Dialog(object):
         self.directory_field.setObjectName("directory_field")
         self.verticalLayout.addWidget(self.directory_field)
         self.browse_button = QtWidgets.QPushButton(self.verticalLayoutWidget)
-        self.browse_button.setEnabled(False)
+        #self.browse_button.setEnabled(False)
         self.browse_button.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
         self.browse_button.setObjectName("browse_button")
         self.verticalLayout.addWidget(self.browse_button)
@@ -65,7 +63,11 @@ class Ui_Dialog(object):
         self.encrypt_radio.setCheckable(True)
         self.encrypt_radio.setChecked(True)
         self.encrypt_radio.setObjectName("encrypt_radio")
-        self.horizontalLayout_2.addWidget(self.encrypt_radio, 0, QtCore.Qt.AlignHCenter)
+        self.horizontalLayout_2.addWidget(self.encrypt_radio)
+        self.decrypt_radio = QtWidgets.QRadioButton(self.verticalLayoutWidget)
+        self.decrypt_radio.setChecked(False)
+        self.decrypt_radio.setObjectName("decrypt_radio")
+        self.horizontalLayout_2.addWidget(self.decrypt_radio)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
@@ -79,38 +81,42 @@ class Ui_Dialog(object):
         self.save_button = QtWidgets.QPushButton(self.verticalLayoutWidget)
         self.save_button.setObjectName("save_button")
         self.verticalLayout.addWidget(self.save_button)
-        self.line_2 = QtWidgets.QFrame(Dialog)
-        self.line_2.setGeometry(QtCore.QRect(120, 290, 20, 71))
-        self.line_2.setFrameShape(QtWidgets.QFrame.VLine)
-        self.line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
-        self.line_2.setObjectName("line_2")
 
         self.retranslateUi(Dialog)
         self.bottom.accepted.connect(Dialog.accept)
         self.bottom.rejected.connect(Dialog.reject)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
-        #Thirrja e funksionit enkripto() kur klikohet butoni save_button
-        self.save_button.clicked.connect(self.enkripto)
+        
+        #Thirrja e funksionit save_function() kur klikohet butoni save_button
+        self.save_button.clicked.connect(self.save_function)
+        self.browse_button.clicked.connect(self.browse_function)
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
         self.title_text.setText(_translate("Dialog", "Cezar Cipher in Albanian Alphabet"))
-        self.write_path_text.setText(_translate("Dialog", "Path (psh: C:\\Users\\HP\\Desktop\\file.txt)"))
+        self.write_path_text.setText(_translate("Dialog", "Path (psh: C:UsersHPDesktope.txt)"))
         self.browse_button.setText(_translate("Dialog", "Browse"))
         self.label_qelesi.setText(_translate("Dialog", "Qelsi:"))
         self.encrypt_radio.setText(_translate("Dialog", "Encrypt"))
+        self.decrypt_radio.setText(_translate("Dialog", "Decrypt"))
         self.filename_label.setText(_translate("Dialog", "Emri i file-it te ri: "))
         self.save_button.setText(_translate("Dialog", "Save"))
 
-    #funskioni enkripto ka per qellim te lidh funksionet 
+    def browse_function(self):
+        directory, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Single File', QtCore.QDir.rootPath() , '*.txt')
+        self.directory_field.setText(directory)
+    #funskioni save_function ka per qellim te lidh funksionet 
     # e tjera per enkriptim dhe interface-it
-    def enkripto(self):
-        #directory e file-it qe do te enkriptohet dhe 
+    def save_function(self):
+        #directory e file-it qe do te save_functionhet dhe 
         # filename- emri i file-it te ri se si do te ruhet
         directory =r'%s' %self.directory_field.text()
         filename = self.filename_field.text()
+        decryptradio = self.decrypt_radio.isChecked()
+        qelesi = self.qelesi.value()
+
         if filename == '':
             #nese eshte shprazet e vendosim default cz_sq.txt
             filename = 'cz_sq.txt'
@@ -120,18 +126,20 @@ class Ui_Dialog(object):
         print('direktoria u murr: ', directory)#debugging
         
         #shiqon se a ka zgjedhur opsionin enkriptimit| apo dekriptimit(ende jo)
-        if self.encrypt_radio.isChecked():
-            encrypt_radio = True
-        qelesi = self.qelesi.value()
+        if decryptradio:
+            qelesi = qelesi * (-1)
+            print('DECRYPTION IS SELECTED')    
+    
         print('qelesi u murr', str(qelesi))
         try:
             print('trying cazar_sq')
-            #thirrja e funksionit per enkriptim nga file-i tjeter cazar_sq
-            cazari_sq.enkripto_dokumentin(directory, filename, qelesi, encrypt_radio)
+            #thirrjs=a e funksionit per enkriptim nga file-i tjeter cazar_sq
+            cesar_sq.enkripto_dokumentin(directory, filename, qelesi)
         except Exception as e:
             print('Not working check fields...')
             print(e)
-        
+
+
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
